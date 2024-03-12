@@ -66,7 +66,7 @@ rain = cursor.fetchone()
 
 if float(light[0]) >= 0.05 and load_boolean_from_file() == False:
     down(3)
-elif float(light[0]) < 0.05 and load_boolean_from_file() == True or float(rain[0]) > 0:
+elif float(light[0]) < 0.05 and load_boolean_from_file() == True or float(rain[0]) > 0 and load_boolean_from_file() == True:
     up(3)
 
 
