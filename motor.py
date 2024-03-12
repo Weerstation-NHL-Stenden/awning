@@ -64,9 +64,9 @@ light = cursor.fetchone()
 cursor.execute("SELECT rain FROM weerstation ORDER BY id DESC LIMIT 1")
 rain = cursor.fetchone()
 
-if float(light[0]) >= 0.05 and load_boolean_from_file() == False:
+if float(light[0]) >= 0.05 and load_boolean_from_file() == False and float(rain[0]) == 0:
     down(3)
-elif float(light[0]) < 0.05 and load_boolean_from_file() == True or float(rain[0]) > 0 and load_boolean_from_file() == True:
+elif (float(light[0]) < 0.05 and load_boolean_from_file() == True) or (float(rain[0]) > 0 and load_boolean_from_file() == True):
     up(3)
 
 
