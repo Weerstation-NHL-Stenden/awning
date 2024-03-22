@@ -48,6 +48,19 @@ def load_boolean_from_file():
         else:
             raise ValueError("Invalid boolean.")
 
+def get_average_light_intensity():
+    cursor.execute("SELECT AVG(light) FROM weerstation ORDER BY id DESC LIMIT 5")
+    average_light = cursor.fetchall()
+
+    return float(average_light[0][0])
+
+def get_average_rain():
+    cursor.execute("SELECT AVG(rain) FROM weerstation ORDER BY id DESC LIMIT 5")
+    average_rain = cursor.fetchall()
+
+    return float(average_rain[0][0])
+
+
 try:
     sql_conn = mysql.connector.connect(user='weerstation', password='Kjeltmeteent',
                           host='localhost',
@@ -58,15 +71,12 @@ except mysql.connector.Error as err:
 
 cursor = sql_conn.cursor()
 
-cursor.execute("SELECT light FROM weerstation ORDER BY id DESC LIMIT 1")
-light = cursor.fetchone()
+avg_light = get_average_light_intensity()
+avg_rain = get_average_rain()
 
-cursor.execute("SELECT rain FROM weerstation ORDER BY id DESC LIMIT 1")
-rain = cursor.fetchone()
-
-if float(light[0]) >= 0.05 and load_boolean_from_file() == False and float(rain[0]) == 0:
+if avg_light >= 0.05 and load_boolean_from_file() == False and avg_rain == 0:
     down(3)
-elif (float(light[0]) < 0.05 and load_boolean_from_file() == True) or (float(rain[0]) > 0 and load_boolean_from_file() == True):
+elif (avg_light < 0.05 and load_boolean_from_file() == True) or avg_rain > 0 and load_boolean_from_file() == True:
     up(3)
 
 
